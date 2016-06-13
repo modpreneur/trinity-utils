@@ -1,0 +1,13 @@
+FROM modpreneur/trinity-test
+
+MAINTAINER Tomas Jancar <jancar@modpreneur.com>
+
+# Install app
+ADD . /var/app
+
+WORKDIR /var/app
+
+
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["sh", "entrypoint.sh"]
