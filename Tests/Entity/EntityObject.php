@@ -30,9 +30,9 @@ class EntityObject extends EntityParent
     public function __construct()
     {
         $this->id     = 11;
-        $this->name   = "Joe Dee";
+        $this->name   = 'Joe Dee';
         $this->price  = 10;
-        $this->desc   = "Long text...";
+        $this->desc   = 'Long text...';
         $this->active = true;
     }
 
@@ -108,10 +108,14 @@ class EntityObject extends EntityParent
         $this->active = $active;
     }
 
-
+    /**
+     * @param $a
+     * @param $c
+     *
+     * @return mixed
+     */
     public function test($a, $c)
     {
         return $a + $c;
     }
-
 }

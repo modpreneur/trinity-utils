@@ -2,7 +2,6 @@
 use Trinity\Bundle\UtilsBundle\Tests\Entity\EntityObject;
 use Trinity\Bundle\UtilsBundle\Utils\ObjectMixin;
 
-
 /**
  * Class UtilsObjectTest
  */
@@ -55,5 +54,4 @@ class UtilsObjectTest extends \PHPUnit_Framework_TestCase
         $e = new EntityObject();
         self::assertEquals(10, ObjectMixin::get($e, 'jhvjjv'));
     }
-
 }

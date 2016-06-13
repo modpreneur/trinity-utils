@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Trinity\Bundle\UtilsBundle\Tests\app;
 
 /*
@@ -15,11 +14,14 @@ use Symfony\Component\HttpKernel\Kernel;
  */
 class AppKernel extends Kernel
 {
+    /**
+     * {@inheritDoc}
+     */
     public function registerBundles()
     {
-        return array(
+        return [
             new FrameworkBundle(),
-        );
+        ];
     }
 
 

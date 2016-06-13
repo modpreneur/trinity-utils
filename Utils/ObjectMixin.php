@@ -24,13 +24,12 @@ class ObjectMixin
         $pname = substr($name, 0, strpos($name, '('));
         $strArgs = substr($name, strpos($name, '(') + 1, strlen($name) - strpos($name, '(') - 2);
 
+        $args = null;
         if (strlen($strArgs) > 0) {
-            $args = (array_map('trim', explode(',', $strArgs)));
-        } else {
-            $args = null;
+            $args = array_map('trim', explode(',', $strArgs));
         }
 
-        $name = $pname ? $pname : $name;
+        $name = $pname ?: $name;
         $methods = self::getMethods([], $class);
         $properties = self::getProperties($class);
         if ($name === '') {
@@ -48,23 +47,28 @@ class ObjectMixin
             $countOfParams = (new \ReflectionMethod($class, $name))->getNumberOfRequiredParameters();
             if ($countOfParams > 0 && !$args) {
                 $source = '';
-                foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS) as $item) {
+                $ignoreArgs = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+                foreach ($ignoreArgs as $item) {
                     if (isset($item['file']) && dirname($item['file']) !== __DIR__) {
                         $source = " in $item[file]:$item[line]";
                         break;
                     }
                 }
-                throw new MemberAccessException("You can not call method '$name' without parameters$source. $countOfParams params is required.",
-                    E_USER_WARNING);
+                throw new MemberAccessException(
+                    "You can not call method '$name' without parameters$source. $countOfParams params is required.",
+                    E_USER_WARNING
+                );
             }
             $reflectionMethod = new \ReflectionMethod($class, $name);
-            $val = $reflectionMethod->invokeArgs($object, $args ? $args : []);
+            return  $reflectionMethod->invokeArgs($object, $args ?: []);
 
-            return $val;
         } else { // strict class
             $items = array_merge($properties, array_keys($methods));
-            $hint = implode(", ", self::getSuggestion($items, $name));
-            throw new MemberAccessException("Cannot read an undeclared property $class::\$$name or method $class::$name()".(strlen($hint) > 1 ? ", did you mean $hint?" : '.'));
+            $hint = implode(', ', self::getSuggestion($items, $name));
+            throw new MemberAccessException(
+                "Cannot read an undeclared property $class::\$$name or method $class::$name()"
+                .(strlen($hint) > 1 ? ", did you mean $hint?" : '.')
+            );
         }
     }
 
@@ -78,10 +82,10 @@ class ObjectMixin
     private static function getMethods($methods, $class)
     {
         $methods[] = array_fill_keys(get_class_methods($class), 0);
-        if ($parent = get_parent_class($class)) {
+        $parent = get_parent_class($class);
+        if ($parent) {
             array_merge($methods, self::getMethods($methods, $parent));
         }
-
         return $methods[0];
     }
 
@@ -95,15 +99,17 @@ class ObjectMixin
     private static function getProperties($class)
     {
         $reflect = new \ReflectionClass($class);
-        $prop = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE);
+        $prop = $reflect->getProperties(
+            \ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED | \ReflectionProperty::IS_PRIVATE
+        );
         $properties = [];
         foreach ($prop as $property) {
             $properties[] = $property->name;
         }
-        if ($parent = get_parent_class($class)) {
+        $parent = get_parent_class($class);
+        if ($parent) {
             $properties = array_merge(self::getProperties($parent), $properties);
         }
-
         return $properties;
     }
 
@@ -121,15 +127,15 @@ class ObjectMixin
         $best = [];
         $min = (strlen($value) / 4 + 1) * 10 + .1;
         foreach ($items as $item) {
-            if ($item !== $value && (($len = levenshtein($item, $value, 10, 11,
-                        10)) < $min || ($len = levenshtein(preg_replace($re, '', $item), $norm, 10, 11,
-                            10) + 20) < $min)
+            if ($item !== $value
+                && (($len = levenshtein($item, $value, 10, 11, 10)) < $min
+                    || ($len = levenshtein(preg_replace($re, '', $item), $norm, 10, 11, 10) + 20) < $min
+                )
             ) {
                 $min = $len;
                 $best[] = $item;
             }
         }
-
         return $best;
     }
 }
