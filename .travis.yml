@@ -1,9 +1,7 @@
 language: php
 
-
 php:
   - '7.0'
-
 
 before_script:
   - phpenv config-add travis.ini
@@ -11,23 +9,17 @@ before_script:
     echo yes | pecl install apcu; fi;
   - composer install
 
-
 script:
   - phpunit --coverage-clover build/logs/clover.xml
-
 
 notifications:
   hipchat:
     rooms:
-      secure: yVWQc8vFHmzpIQsRzXVUlrb0oBOy8HHeax7Ftwr/2HwMRqDoiu0RZjt9Vg8S73xOiNc99bz1pECLY95nAqU+4ARRMyJdhqG6lWEGhsZdkDOd2SsN0/G3oHRxbEyarrLfQvn2UUYmeiaxtli01WUWIZ5aWxvdPnnna4+K6cutPH/c/nVT7p99g9gfUy5qb1zmJW3o7WY6DRrSPAA00m/7zMw0Ud+uKBgZiBNQFRJha6hkJ9/Bt7AkcXjamZypZdpLo+xdwON+IfdaIFIBztq5l6UKxGR1+ig3FoikkQLw3xbPOINo1oIshpfeQEhxw7FU04SwqaKGNJPfkfFfINivnpmeewPaRYmM4Hhk8p0ocwNW4Xh6wnFw9eLdDsjNsshEHTbvt6qF31CpBYyPxvLcDoRncR62px+IVv4l2EzFXJdom5LX54XBJiG0uKLBeeRzt+6bVoYX0IHNKcwynWY1fw7mHr3PzX+oho+SG9MVayODK+aKKJzcdkatltSVEziBUXG2RIniRlM0txMtIRKJdfky1arnqhKF5V0j+cN4WgfxKw1ICeTtgtCOZC3vSreXBJCI4R4QSFed3wxCxkd2IbvManfQEA63XxAEO5DHoOSOgGi5DE8sIf+EZbilCZJfvyoHs4KGVHhUZWfm+zocXXN6+PpKY1f3YHv6NAShLEA=
-    on_success: never
-    on_failure: always
-
+      secure: EY4f1KnJWu3aHK8XhpNOy62l05VRPgtcIXExjr9Ez0Re3CwlQL9kNymBlFaDZcfGaAElvgbN8DAqRIe+DxkxkVeuWIyhnUJFsGhlPqKLVP1ir+E2hmFJ6Y3UOPOivtJVCSigDs4R9he+9DT+oaJdAXi7ijvPdoUt3+aA+JQVuBI5cp/Tw0LD0ZuYtVLJi11MuAUy/TJ0zfJup+sh98CjzdrVc9+vYvlAVvXyxYMHVIlSx19s0E7My/rajcUDXM755zZeHeBX1oZRKhMsWkgNUxt8XrMXQ2A7zlv+VZ7H7GSEKsNlEzvIxwbX3HAz2AjRMO7dkUfErIbiW4Y3GQ1iW3p0j3/x3tJ+PeTgfgOVUdF/tPMigIW+h4yOJEyiye1bfajSWvHpN+p3z2yh8etpJNi27tDmLwlvg5fxU29dXr241sQg/6pSLvwN+aXyDgthDVZI6yfBTRifo/io68q25rlZcSL7Kjx/sIdir6zfxW8r6CH2Gw4/GjUziR3Jo1TrrfFP9EX5kL0whmeLKIRCMzDIWb44DldkAikG+zFZoIhbdtVTzC31oeGEYn3UusZiwg2PiSmDtwjdGxvFhtvfXDNel5DFKY9DWX/kBnzwhBhuO5brlfmZX89s7T6EQVuD1dwOWaAIxoxbMNARF89aUrAFrIW9Fn38ytJLQ+gVYjE=
 
 after_success:
   - sh -c 'php vendor/bin/coveralls -v'
 
-
 cache:
-    directories:
-        - $HOME/.composer/cache
+  directories:
+    - "$HOME/.composer/cache"
