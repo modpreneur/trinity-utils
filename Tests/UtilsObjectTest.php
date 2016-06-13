@@ -20,7 +20,7 @@ class UtilsObjectTest extends \PHPUnit_Framework_TestCase
         self::assertEquals(10, ObjectMixin::get($e, 'add(4, 6)'));
     }
 
-    
+
     /**
      *
      * @expectedException \Trinity\Bundle\UtilsBundle\Exception\MemberAccessException

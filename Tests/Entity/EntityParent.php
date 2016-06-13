@@ -1,6 +1,6 @@
 <?php
 
-namespace  Trinity\Bundle\UtilsBundle\Tests\Entity;
+namespace Trinity\Bundle\UtilsBundle\Tests\Entity;
 
 /**
  * Class EntityParent
