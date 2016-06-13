@@ -1,0 +1,34 @@
+{
+  "name": "trinity/utils",
+  "description": "Trinity Utils bundle",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Trinity Team",
+      "email": "info@modpreneur.com"
+    }
+  ],
+
+  "require": {
+    "php": ">=7",
+    "symfony/framework-bundle": "~2.8 | ~3"
+  },
+
+  "require-dev": {
+    "phpunit/phpunit": "5.*"
+  },
+
+  "autoload": {
+    "psr-4": { "Trinity\\Bundle\\UtilsBundle\\": "" },
+    "exclude-from-classmap": [
+      "/Tests/"
+    ]
+  },
+
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
+}
