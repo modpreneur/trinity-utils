@@ -5,7 +5,7 @@ namespace Trinity\Bundle\UtilsBundle\Tests\app;
 /*
  * This file is part of the Trinity project.
  */
-use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+//use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\HttpKernel\Kernel;
 
@@ -20,7 +20,7 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         return [
-            new FrameworkBundle(),
+//            new FrameworkBundle(),
         ];
     }
 

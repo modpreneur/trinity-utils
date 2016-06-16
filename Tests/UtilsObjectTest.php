@@ -1,4 +1,5 @@
 <?php
+
 use Trinity\Bundle\UtilsBundle\Tests\Entity\EntityObject;
 use Trinity\Bundle\UtilsBundle\Utils\ObjectMixin;
 
