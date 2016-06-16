@@ -1,6 +1,6 @@
 <?php
 
-namespace Trinity\Bundle\UtilsBundle\Tests\app;
+namespace Trinity\Component\Utils\Tests\app;
 
 /*
  * This file is part of the Trinity project.

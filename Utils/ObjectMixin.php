@@ -1,8 +1,8 @@
 <?php
 
-namespace Trinity\Bundle\UtilsBundle\Utils;
+namespace Trinity\Component\Utils\Utils;
 
-use Trinity\Bundle\UtilsBundle\Exception\MemberAccessException;
+use Trinity\Component\Utils\Exception\MemberAccessException;
 
 /**
  * Class ObjectMixin

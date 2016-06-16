@@ -22,7 +22,7 @@
   },
 
   "autoload": {
-    "psr-4": { "Trinity\\Bundle\\UtilsBundle\\": "" },
+    "psr-4": { "Trinity\\Component\\Utils\\": "" },
     "exclude-from-classmap": [
       "/Tests/"
     ]

@@ -1,10 +1,10 @@
 <?php
 
-namespace Trinity\Bundle\UtilsBundle\Exception;
+namespace Trinity\Component\Utils\Exception;
 
 /**
  * Class MemberAccessException
- * @package Trinity\Bundle\UtilsBundle\Exception
+ * @package Trinity\Component\Utils\Exception
  */
 class MemberAccessException extends \Exception
 {

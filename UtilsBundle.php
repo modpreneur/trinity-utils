@@ -3,7 +3,7 @@
  * This file is part of Trinity package.
  */
 
-namespace Trinity\Bundle\UtilsBundle;
+namespace Trinity\Component\Utils;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

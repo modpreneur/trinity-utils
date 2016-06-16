@@ -1,10 +1,10 @@
 <?php
 
-namespace Trinity\Bundle\UtilsBundle\Tests\Entity;
+namespace Trinity\Component\Utils\Tests\Entity;
 
 /**
  * Class EntityParent
- * @package Trinity\Bundle\UtilsBundle\Tests
+ * @package Trinity\Component\Utils\Tests
  */
 class EntityParent
 {

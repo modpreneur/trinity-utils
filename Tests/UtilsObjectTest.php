@@ -1,7 +1,7 @@
 <?php
 
-use Trinity\Bundle\UtilsBundle\Tests\Entity\EntityObject;
-use Trinity\Bundle\UtilsBundle\Utils\ObjectMixin;
+use Trinity\Component\Utils\Tests\Entity\EntityObject;
+use Trinity\Component\Utils\Utils\ObjectMixin;
 
 /**
  * Class UtilsObjectTest
@@ -23,8 +23,8 @@ class UtilsObjectTest extends \PHPUnit_Framework_TestCase
 
     /**
      *
-     * @expectedException \Trinity\Bundle\UtilsBundle\Exception\MemberAccessException
-     * @throws \Trinity\Bundle\UtilsBundle\Exception\MemberAccessException
+     * @expectedException \Trinity\Component\Utils\Exception\MemberAccessException
+     * @throws \Trinity\Component\Utils\Exception\MemberAccessException
      */
     public function testFunctionWithoutParams()
     {
@@ -34,9 +34,9 @@ class UtilsObjectTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * @expectedException \Trinity\Bundle\UtilsBundle\Exception\MemberAccessException
-     * @expectedExceptionMessage Cannot read an undeclared property Trinity\Bundle\UtilsBundle\Tests\Entity\EntityObject::$names or method Trinity\Bundle\UtilsBundle\Tests\Entity\EntityObject::names(), did you mean name?
-     * @throws \Trinity\Bundle\UtilsBundle\Exception\MemberAccessException
+     * @expectedException \Trinity\Component\Utils\Exception\MemberAccessException
+     * @expectedExceptionMessage Cannot read an undeclared property Trinity\Component\Utils\Tests\Entity\EntityObject::$names or method Trinity\Component\Utils\Tests\Entity\EntityObject::names(), did you mean name?
+     * @throws \Trinity\Component\Utils\Exception\MemberAccessException
      */
     public function testHing()
     {
@@ -46,9 +46,9 @@ class UtilsObjectTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * @expectedException Trinity\Bundle\UtilsBundle\Exception\MemberAccessException
-     * @expectedExceptionMessage Cannot read an undeclared property Trinity\Bundle\UtilsBundle\Tests\Entity\EntityObject::$jhvjjv or method Trinity\Bundle\UtilsBundle\Tests\Entity\EntityObject::jhvjjv()
-     * @throws  Trinity\Bundle\UtilsBundle\Exception\MemberAccessException
+     * @expectedException Trinity\Component\Utils\Exception\MemberAccessException
+     * @expectedExceptionMessage Cannot read an undeclared property Trinity\Component\Utils\Tests\Entity\EntityObject::$jhvjjv or method Trinity\Component\Utils\Tests\Entity\EntityObject::jhvjjv()
+     * @throws  Trinity\Component\Utils\Exception\MemberAccessException
      */
     public function testHing2()
     {
