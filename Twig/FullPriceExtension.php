@@ -5,6 +5,8 @@
 
 namespace  Trinity\Component\Utils\Twig;
 
+use Trinity\Component\Utils\Services\PriceStringGenerator;
+
 
 /**
  * Class FullPriceExtension
