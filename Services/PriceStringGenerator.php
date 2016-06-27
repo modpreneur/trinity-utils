@@ -1,6 +1,6 @@
 <?php
 
-namespace Trinity\Component\Utils\TwigExtensions;
+namespace Trinity\Component\Utils\Services;
 
 use Symfony\Component\Intl\NumberFormatter\NumberFormatter;
 use Trinity\Bundle\SettingsBundle\Manager\SettingsManager;
