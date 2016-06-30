@@ -19,10 +19,10 @@
     "doctrine/annotations": "~1.2",
     "phpunit/phpunit": "~5.0",
     "satooshi/php-coveralls" : "~1.0",
-    "trinity/settings": "dev-master",
-    "trinity/core-interfaces": "dev-master",
     "twig/twig": "~1",
-    "symfony/intl": "~3"
+    "symfony/intl": "~3",
+    "trinity/settings": "~1.1",
+    "trinity/core-interfaces": "dev-master",
   },
 
   "autoload": {
