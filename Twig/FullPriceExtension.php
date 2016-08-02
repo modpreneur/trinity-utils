@@ -5,6 +5,7 @@
 
 namespace  Trinity\Component\Utils\Twig;
 
+use Necktie\PaymentBundle\Entity\BillingPlan;
 use Trinity\Component\Utils\Services\PriceStringGenerator;
 
 
@@ -34,9 +35,23 @@ class FullPriceExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFunction('fullPrice', [$this, 'fullPrice']),
+            new \Twig_SimpleFunction('fullPriceByPlan', [$this, 'fullPriceByPlan']),
         ];
     }
 
+    /**
+     * @param BillingPlan $plan
+     *
+     * @return string
+     * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
+     * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
+     * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
+     *
+     */
+    public function fullPriceByPlan(BillingPlan $plan) :string
+    {
+        return $this->generator->generateFullPriceStr($plan);
+    }
 
     /**
      * @param int $initialPrice
