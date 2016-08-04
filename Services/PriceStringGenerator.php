@@ -51,6 +51,7 @@ class PriceStringGenerator
 
     /**
      * @param BillingPlanInterface[] $billingPlans
+     * @return string
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
@@ -80,9 +81,7 @@ class PriceStringGenerator
                         "Billing plans with different $attribute can not be combinated."
                     );
                 } else {
-                    dump($attribute);
                     $$attribute = $plan->$getter();
-                    dump($$attribute);
                 }
             }
         }
