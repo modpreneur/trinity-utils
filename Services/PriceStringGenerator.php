@@ -50,6 +50,54 @@ class PriceStringGenerator
 
 
     /**
+     * @param BillingPlanInterface[] $billingPlans
+     * @throws \InvalidArgumentException
+     * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
+     * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
+     * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
+     */
+    public function generatePaymentStr(array $billingPlans):string
+    {
+        $hasToBeSame = ['rebillTimes', 'trial', 'frequency'];
+
+        $rebillPrice = 0;
+        $rebillTimes = 0;
+        $initialPrice = 0;
+        $trial = 0;
+        $frequency = 0;
+
+        foreach ($billingPlans as $plan) {
+            $initialPrice += $plan->getInitialPrice();
+            if ($plan->getType() === 'standard') {
+                continue;
+            }
+            $rebillPrice += $plan->getRebillPrice();
+
+            foreach ($hasToBeSame as $attribute) {
+                $getter = 'get' . ucfirst($attribute);
+                if ($$attribute && $$attribute !== $plan->$getter()) {
+                    throw new \InvalidArgumentException(
+                        "Billing plans with different $attribute can not be combinated."
+                    );
+                } else {
+                    dump($attribute);
+                    $$attribute = $plan->$getter();
+                    dump($$attribute);
+                }
+            }
+        }
+
+        return $this->generatePaymentString(
+            $initialPrice,
+            $rebillTimes?'recurring':'standard',
+            $rebillPrice,
+            $rebillTimes,
+            $frequency,
+            $trial
+        );
+    }
+
+    /**
      * @param BillingPlanInterface $billingPlan
      * @return string
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
@@ -97,22 +145,7 @@ class PriceStringGenerator
         if ($type === 'standard') {
             return $formatter->formatCurrency($initialPrice, $currency);
         } else {
-            switch ($frequency) {
-                case 7:
-                    $str = 'weekly';
-                    break;
-                case 14:
-                    $str = 'bi-weekly';
-                    break;
-                case 30:
-                    $str = 'monthly';
-                    break;
-                case 91:
-                    $str = 'quartaly';
-                    break;
-                default:
-                    $str = '';
-            }
+            $str = $this->frequencyString($frequency);
             if ($rebillTimes === 999) {
                 return $formatter->formatCurrency($initialPrice + 0, $currency) . ' and '
                 . $formatter->formatCurrency($rebillPrice + 0, $currency) . ' ' . $str;
@@ -122,5 +155,80 @@ class PriceStringGenerator
             . $rebillTimes . ' times ' . $formatter->formatCurrency($rebillPrice + 0, $currency) . ' ' . $str;
         }
 
+    }
+
+    /**
+     * @param int $initialPrice
+     * @param string $type
+     * @param int $rebillPrice
+     * @param int $rebillTimes
+     * @param int $frequency
+     * @param int $trial
+     * @return string
+     * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
+     * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
+     * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
+     *
+     */
+    public function generatePaymentString(
+        int $initialPrice,
+        string $type = 'standard',
+        $rebillPrice = 0,
+        $rebillTimes = 0,
+        $frequency = 0,
+        $trial = 0
+    ) {
+        $currency = $this->settingsManager->get('currency');
+
+        $formatter = new NumberFormatter($this->locale, NumberFormatter::CURRENCY);
+
+        if ($type === 'standard') {
+            return $formatter->formatCurrency($initialPrice, $currency);
+        } else {
+            $str = '';
+
+            if ((double) $initialPrice !== (double) $rebillPrice) {
+                $str .= $formatter->formatCurrency($initialPrice, $currency) . ' first payment, then ';
+            }
+
+            if ($rebillTimes && $rebillTimes !== 999) {
+                $str .= $rebillTimes . ' payment';
+                $str .= ($rebillTimes > 1) ? 's' : '';
+                $str .= ' of ';
+            }
+
+            $str .= $formatter->formatCurrency($rebillPrice, $currency);
+            $str .= ' ' . $this->frequencyString($frequency);
+            if ($trial) {
+                $str .= ' with ' . $trial . ' trial day';
+                $str .= $trial > 1 ? 's' : '';
+            }
+            return $str;
+        }
+    }
+
+    /**
+     * @param int $frequency
+     * @return string
+     */
+    private function frequencyString(int $frequency) :string
+    {
+        switch ($frequency) {
+            case 7:
+                $str = 'weekly';
+                break;
+            case 14:
+                $str = 'bi-weekly';
+                break;
+            case 30:
+                $str = 'monthly';
+                break;
+            case 91:
+                $str = 'quartaly';
+                break;
+            default:
+                $str = '';
+        }
+        return $str;
     }
 }
