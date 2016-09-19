@@ -1,6 +1,6 @@
 FROM modpreneur/trinity-test:alpine
 
-MAINTAINER Barbora Čápová <capova@modpreneur.com>
+MAINTAINER Martin Kolek <kolek@modpreneur.com>
 
 # Install app
 ADD . /var/app
