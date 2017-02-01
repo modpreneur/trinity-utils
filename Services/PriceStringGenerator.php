@@ -8,7 +8,6 @@ use Trinity\Component\Core\Interfaces\BillingPlanInterface;
 
 /**
  * Class PriceStringGenerator
- * @package Trinity\Component\TwigExtensions
  */
 class PriceStringGenerator
 {

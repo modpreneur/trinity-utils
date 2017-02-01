@@ -22,7 +22,7 @@
     "satooshi/php-coveralls" : "~1.0",
     "twig/twig": "~1",
     "symfony/intl": "~3",
-    "trinity/settings": "~1.1",
+    "trinity/settings": "~1.2",
     "trinity/core-interfaces": "dev-master"
   },
 
