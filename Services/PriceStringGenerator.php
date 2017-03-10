@@ -50,13 +50,14 @@ class PriceStringGenerator
 
     /**
      * @param BillingPlanInterface[] $billingPlans
+     * @param bool $shortFormat True - short format(used in flofit), false - long, necktie format
      * @return string
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
      */
-    public function generatePaymentStr(array $billingPlans):string
+    public function generatePaymentStr(array $billingPlans, bool $shortFormat = false):string
     {
         $hasToBeSame = ['rebillTimes', 'trial', 'frequency'];
 
@@ -85,14 +86,25 @@ class PriceStringGenerator
             }
         }
 
-        return $this->generatePaymentString(
-            $initialPrice,
-            $rebillTimes?'recurring':'standard',
-            $rebillPrice,
-            $rebillTimes,
-            $frequency,
-            $trial
-        );
+        //todo: @JakubFajkus - this is not nice but there is no time to spare
+        if ($shortFormat === true) {
+            return $this->generateShortPaymentString(
+                $initialPrice,
+                $rebillTimes?'recurring':'standard',
+                $rebillPrice,
+                $rebillTimes,
+                $frequency
+            );
+        } else {
+            return $this->generatePaymentString(
+                $initialPrice,
+                $rebillTimes?'recurring':'standard',
+                $rebillPrice,
+                $rebillTimes,
+                $frequency,
+                $trial
+            );
+        }
     }
 
     /**
@@ -152,7 +164,6 @@ class PriceStringGenerator
             return $formatter->formatCurrency($initialPrice + 0, $currency) . ' and '
             . $rebillTimes . ' times ' . $formatter->formatCurrency($rebillPrice + 0, $currency) . ' ' . $str;
         }
-
     }
 
     /**
@@ -201,6 +212,54 @@ class PriceStringGenerator
                 $str .= ' with ' . $trial . ' trial day';
                 $str .= $trial > 1 ? 's' : '';
             }
+            return $str;
+        }
+    }
+
+    /**
+     *todo: @JakubFajkus - this is not nice but there is no time to spare
+     *
+     * @param int $initialPrice
+     * @param string $type
+     * @param int $rebillPrice
+     * @param int $rebillTimes
+     * @param int $frequency
+     *
+     * @return string
+     *
+     * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
+     * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
+     * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
+     *
+     */
+    public function generateShortPaymentString(
+        int $initialPrice,
+        string $type = 'standard',
+        $rebillPrice = 0,
+        $rebillTimes = 0,
+        $frequency = 0
+    ) {
+        $currency = $this->settingsManager->get('currency');
+
+        $formatter = new NumberFormatter($this->locale, NumberFormatter::CURRENCY);
+
+        if ($type === 'standard') {
+            return $formatter->formatCurrency($initialPrice, $currency);
+        } else {
+            $str = '';
+
+            if ((double) $initialPrice !== (double) $rebillPrice) {
+                $str .= $formatter->formatCurrency($initialPrice, $currency) . ', plus ';
+            }
+
+            $str .= $formatter->formatCurrency($rebillPrice, $currency);
+
+            if ($rebillTimes && $rebillTimes !== 999) {
+                $str .= ' x ' . $rebillTimes;
+            } else {
+                $str .= ' ' . $this->frequencyString($frequency);
+            }
+
             return $str;
         }
     }
