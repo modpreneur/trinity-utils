@@ -50,14 +50,13 @@ class PriceStringGenerator
 
     /**
      * @param BillingPlanInterface[] $billingPlans
-     * @param bool $shortFormat True - short format(used in flofit), false - long, necktie format
      * @return string
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
      */
-    public function generatePaymentStr(array $billingPlans, bool $shortFormat = false):string
+    public function generatePaymentStr(array $billingPlans):string
     {
         $hasToBeSame = ['rebillTimes', 'trial', 'frequency'];
 
@@ -86,25 +85,14 @@ class PriceStringGenerator
             }
         }
 
-        //todo: @JakubFajkus - this is not nice but there is no time to spare
-        if ($shortFormat === true) {
-            return $this->generateShortPaymentString(
-                $initialPrice,
-                $rebillTimes?'recurring':'standard',
-                $rebillPrice,
-                $rebillTimes,
-                $frequency
-            );
-        } else {
-            return $this->generatePaymentString(
-                $initialPrice,
-                $rebillTimes?'recurring':'standard',
-                $rebillPrice,
-                $rebillTimes,
-                $frequency,
-                $trial
-            );
-        }
+        return $this->generatePaymentString(
+            $initialPrice,
+            $rebillTimes?'recurring':'standard',
+            $rebillPrice,
+            $rebillTimes,
+            $frequency,
+            $trial
+        );
     }
 
     /**
@@ -164,6 +152,7 @@ class PriceStringGenerator
             return $formatter->formatCurrency($initialPrice + 0, $currency) . ' and '
             . $rebillTimes . ' times ' . $formatter->formatCurrency($rebillPrice + 0, $currency) . ' ' . $str;
         }
+
     }
 
     /**
@@ -217,8 +206,6 @@ class PriceStringGenerator
     }
 
     /**
-     *todo: @JakubFajkus - this is not nice but there is no time to spare
-     *
      * @param int $initialPrice
      * @param string $type
      * @param int $rebillPrice
