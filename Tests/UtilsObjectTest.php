@@ -1,12 +1,13 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
 use Trinity\Component\Utils\Tests\Entity\EntityObject;
 use Trinity\Component\Utils\Utils\ObjectMixin;
 
 /**
  * Class UtilsObjectTest
  */
-class UtilsObjectTest extends \PHPUnit_Framework_TestCase
+class UtilsObjectTest extends TestCase
 {
 
     public function testMixins()
