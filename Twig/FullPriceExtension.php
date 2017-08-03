@@ -41,13 +41,15 @@ class FullPriceExtension extends \Twig_Extension
 
     /**
      * @param array $plans
+     *
      * @return string
+     * @throws \UnexpectedValueException
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      */
-    public function fullPaymentByPlans(array $plans)
+    public function fullPaymentByPlans(array $plans): string
     {
         return $this->generator->generatePaymentStr($plans);
     }
@@ -56,6 +58,7 @@ class FullPriceExtension extends \Twig_Extension
      * @param BillingPlanInterface $plan
      *
      * @return string
+     * @throws \UnexpectedValueException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
@@ -67,18 +70,19 @@ class FullPriceExtension extends \Twig_Extension
     }
 
     /**
-     * @param int $initialPrice
+     * @param float $initialPrice
      * @param string $type
-     * @param int $rebillPrice
+     * @param float $rebillPrice
      * @param int $rebillTimes
      *
      * @return string
+     * @throws \UnexpectedValueException
      *
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      */
-    public function fullPrice($initialPrice, $type, $rebillPrice, $rebillTimes):string
+    public function fullPrice(float $initialPrice, string $type, float $rebillPrice, int $rebillTimes):string
     {
         return $this->generator->generateFullPrice($initialPrice, $type, $rebillPrice, $rebillTimes);
     }

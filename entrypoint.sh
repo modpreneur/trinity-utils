@@ -6,4 +6,4 @@ phpunit
 
 phpstan analyse Exception/ Hydrators/ Services/ Tests/ Twig/ Utils/ --level=4
 
-#tail -f /dev/null
+tail -f /dev/null

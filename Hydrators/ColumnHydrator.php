@@ -13,7 +13,7 @@ class ColumnHydrator extends AbstractHydrator
     /**
      * {@inheritDoc}
      */
-    protected function hydrateAllData()
+    protected function hydrateAllData(): array
     {
         return $this->_stmt->fetchAll(PDO::FETCH_COLUMN);
     }

@@ -12,7 +12,7 @@ class EntityObject extends EntityParent
     private $name;
 
 
-    /** @var string */
+    /** @var int */
     private $price;
 
 
@@ -29,7 +29,7 @@ class EntityObject extends EntityParent
      */
     public function __construct()
     {
-        $this->id     = 11;
+        parent::__construct(11);
         $this->name   = 'Joe Dee';
         $this->price  = 10;
         $this->desc   = 'Long text...';
@@ -40,7 +40,7 @@ class EntityObject extends EntityParent
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -58,7 +58,7 @@ class EntityObject extends EntityParent
     /**
      * @return int
      */
-    public function getPrice()
+    public function getPrice(): int
     {
         return $this->price;
     }
@@ -67,7 +67,7 @@ class EntityObject extends EntityParent
     /**
      * @param int $price
      */
-    public function setPrice($price)
+    public function setPrice(int $price)
     {
         $this->price = $price;
     }
@@ -76,7 +76,7 @@ class EntityObject extends EntityParent
     /**
      * @return string
      */
-    public function getDesc()
+    public function getDesc(): string
     {
         return $this->desc;
     }
@@ -85,7 +85,7 @@ class EntityObject extends EntityParent
     /**
      * @param string $desc
      */
-    public function setDesc($desc)
+    public function setDesc(string $desc)
     {
         $this->desc = $desc;
     }
@@ -94,7 +94,7 @@ class EntityObject extends EntityParent
     /**
      * @return boolean
      */
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }
@@ -103,18 +103,18 @@ class EntityObject extends EntityParent
     /**
      * @param boolean $active
      */
-    public function setActive($active)
+    public function setActive(bool $active)
     {
         $this->active = $active;
     }
 
     /**
-     * @param $a
-     * @param $c
+     * @param int $a
+     * @param int $c
      *
-     * @return mixed
+     * @return int
      */
-    public function test($a, $c)
+    public function test(int $a, int $c)
     {
         return $a + $c;
     }

@@ -28,15 +28,16 @@ class PriceStringGenerator
         $this->locale = $locale;
     }
 
-
     /**
      * @param BillingPlanInterface $billingPlan
+     *
      * @return string
+     * @throws \UnexpectedValueException
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      */
-    public function generateFullPriceStr(BillingPlanInterface $billingPlan) : string
+    public function generateFullPriceStr(BillingPlanInterface $billingPlan): string
     {
         return $this->generateFullPrice(
             $billingPlan->getInitialPrice(),
@@ -47,10 +48,11 @@ class PriceStringGenerator
         );
     }
 
-
     /**
      * @param BillingPlanInterface[] $billingPlans
+     *
      * @return string
+     * @throws \UnexpectedValueException
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
@@ -74,20 +76,19 @@ class PriceStringGenerator
             $rebillPrice += $plan->getRebillPrice();
 
             foreach ($hasToBeSame as $attribute) {
-                $getter = 'get' . ucfirst($attribute);
+                $getter = 'get' . \ucfirst($attribute);
                 if ($$attribute && $$attribute !== $plan->$getter()) {
                     throw new \InvalidArgumentException(
                         "Billing plans with different $attribute can not be combinated."
                     );
-                } else {
-                    $$attribute = $plan->$getter();
                 }
+                $$attribute = $plan->$getter();
             }
         }
 
         return $this->generatePaymentString(
             $initialPrice,
-            $rebillTimes?'recurring':'standard',
+            $rebillTimes ? 'recurring' : 'standard',
             $rebillPrice,
             $rebillTimes,
             $frequency,
@@ -95,9 +96,12 @@ class PriceStringGenerator
         );
     }
 
+
     /**
      * @param BillingPlanInterface $billingPlan
+     *
      * @return string
+     * @throws \UnexpectedValueException
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
@@ -116,140 +120,142 @@ class PriceStringGenerator
 
 
     /**
-     * @param int $initialPrice
+     * @param float $initialPrice
      * @param string $type
-     * @param int $rebillPrice
+     * @param float $rebillPrice
      * @param int $rebillTimes
      * @param int $frequency
      *
      * @return string
-     *
+     * @throws \UnexpectedValueException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
      */
     public function generateFullPrice(
-        int $initialPrice,
+        float $initialPrice,
         string $type = 'standard',
-        $rebillPrice = 0,
-        $rebillTimes = 0,
-        $frequency = 0
-    ):string
-    {
+        float $rebillPrice = 0,
+        int $rebillTimes = 0,
+        int $frequency = 0
+    ):string {
         $currency = $this->settingsManager->get('currency');
 
         $formatter = new NumberFormatter($this->locale, NumberFormatter::CURRENCY);
 
         if ($type === 'standard') {
             return $formatter->formatCurrency($initialPrice, $currency);
-        } else {
-            $str = $this->frequencyString($frequency);
-            if ($rebillTimes === 999) {
-                return $formatter->formatCurrency($initialPrice + 0, $currency) . ' and '
-                . $formatter->formatCurrency($rebillPrice + 0, $currency) . ' ' . $str;
-            }
-
-            return $formatter->formatCurrency($initialPrice + 0, $currency) . ' and '
-            . $rebillTimes . ' times ' . $formatter->formatCurrency($rebillPrice + 0, $currency) . ' ' . $str;
         }
 
+        $str = $this->frequencyString($frequency);
+        if ($rebillTimes === 999) {
+            return $formatter->formatCurrency($initialPrice + 0, $currency) . ' and '
+            . $formatter->formatCurrency($rebillPrice + 0, $currency) . ' ' . $str;
+        }
+
+        return $formatter->formatCurrency($initialPrice + 0, $currency) . ' and '
+        . $rebillTimes . ' times ' . $formatter->formatCurrency($rebillPrice + 0, $currency) . ' ' . $str;
     }
 
     /**
-     * @param int $initialPrice
+     * @param float $initialPrice
      * @param string $type
-     * @param int $rebillPrice
+     * @param float $rebillPrice
      * @param int $rebillTimes
      * @param int $frequency
      * @param int $trial
+     *
      * @return string
+     * @throws \UnexpectedValueException
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
      *
      */
     public function generatePaymentString(
-        int $initialPrice,
+        float $initialPrice,
         string $type = 'standard',
-        $rebillPrice = 0,
-        $rebillTimes = 0,
-        $frequency = 0,
-        $trial = 0
-    ) {
+        float $rebillPrice = 0,
+        int $rebillTimes = 0,
+        int $frequency = 0,
+        int $trial = 0
+    ): string {
         $currency = $this->settingsManager->get('currency');
 
         $formatter = new NumberFormatter($this->locale, NumberFormatter::CURRENCY);
 
         if ($type === 'standard') {
             return $formatter->formatCurrency($initialPrice, $currency);
-        } else {
-            $str = '';
-
-            if ((double) $initialPrice !== (double) $rebillPrice) {
-                $str .= $formatter->formatCurrency($initialPrice, $currency) . ' first payment, then ';
-            }
-
-            if ($rebillTimes && $rebillTimes !== 999) {
-                $str .= $rebillTimes . ' payment';
-                $str .= ($rebillTimes > 1) ? 's' : '';
-                $str .= ' of ';
-            }
-
-            $str .= $formatter->formatCurrency($rebillPrice, $currency);
-            $str .= ' ' . $this->frequencyString($frequency);
-            if ($trial) {
-                $str .= ' with ' . $trial . ' trial day';
-                $str .= $trial > 1 ? 's' : '';
-            }
-            return $str;
         }
+
+        $str = '';
+
+        if ($initialPrice !== $rebillPrice) {
+            $str .= $formatter->formatCurrency($initialPrice, $currency) . ' first payment, then ';
+        }
+
+        if ($rebillTimes && $rebillTimes !== 999) {
+            $str .= $rebillTimes . ' payment';
+            $str .= ($rebillTimes > 1) ? 's' : '';
+            $str .= ' of ';
+        }
+
+        $str .= $formatter->formatCurrency($rebillPrice, $currency);
+        $str .= ' ' . $this->frequencyString($frequency);
+        if ($trial) {
+            $str .= ' with ' . $trial . ' trial day';
+            $str .= $trial > 1 ? 's' : '';
+        }
+        return $str;
     }
 
+
     /**
-     * @param int $initialPrice
+     * @param float $initialPrice
      * @param string $type
-     * @param int $rebillPrice
+     * @param float $rebillPrice
      * @param int $rebillTimes
      * @param int $frequency
      *
      * @return string
-     *
+     * @throws \UnexpectedValueException
      * @throws \Trinity\Bundle\SettingsBundle\Exception\PropertyNotExistsException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentNotImplementedException
      * @throws \Symfony\Component\Intl\Exception\MethodArgumentValueNotImplementedException
      *
      */
     public function generateShortPaymentString(
-        int $initialPrice,
+        float $initialPrice,
         string $type = 'standard',
-        $rebillPrice = 0,
-        $rebillTimes = 0,
-        $frequency = 0
-    ) {
+        float $rebillPrice = 0,
+        int $rebillTimes = 0,
+        int $frequency = 0
+    ): string {
         $currency = $this->settingsManager->get('currency');
 
         $formatter = new NumberFormatter($this->locale, NumberFormatter::CURRENCY);
 
         if ($type === 'standard') {
             return $formatter->formatCurrency($initialPrice, $currency);
-        } else {
-            $str = '';
-
-            if ((double) $initialPrice !== (double) $rebillPrice) {
-                $str .= $formatter->formatCurrency($initialPrice, $currency) . ', plus ';
-            }
-
-            $str .= $formatter->formatCurrency($rebillPrice, $currency);
-
-            if ($rebillTimes && $rebillTimes !== 999) {
-                $str .= ' x ' . $rebillTimes;
-            } else {
-                $str .= ' ' . $this->frequencyString($frequency);
-            }
-
-            return $str;
         }
+
+        $str = '';
+
+        if ($initialPrice !== $rebillPrice) {
+            $str .= $formatter->formatCurrency($initialPrice, $currency) . ', plus ';
+        }
+
+        $str .= $formatter->formatCurrency($rebillPrice, $currency);
+
+        if ($rebillTimes && $rebillTimes !== 999) {
+            $str .= ' x ' . $rebillTimes;
+        } else {
+            $str .= ' ' . $this->frequencyString($frequency);
+        }
+
+        return $str;
     }
+
 
     /**
      * @param int $frequency

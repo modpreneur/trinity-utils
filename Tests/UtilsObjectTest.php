@@ -1,5 +1,7 @@
 <?php
 
+namespace Trinity\Component\Utils\Tests;
+
 use PHPUnit\Framework\TestCase;
 use Trinity\Component\Utils\Tests\Entity\EntityObject;
 use Trinity\Component\Utils\Utils\ObjectMixin;
@@ -47,9 +49,9 @@ class UtilsObjectTest extends TestCase
 
 
     /**
-     * @expectedException Trinity\Component\Utils\Exception\MemberAccessException
+     * @expectedException \Trinity\Component\Utils\Exception\MemberAccessException
      * @expectedExceptionMessage Cannot read an undeclared property Trinity\Component\Utils\Tests\Entity\EntityObject::$jhvjjv or method Trinity\Component\Utils\Tests\Entity\EntityObject::jhvjjv()
-     * @throws  Trinity\Component\Utils\Exception\MemberAccessException
+     * @throws  \Trinity\Component\Utils\Exception\MemberAccessException
      */
     public function testHing2()
     {

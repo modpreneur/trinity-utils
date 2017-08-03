@@ -9,32 +9,46 @@ namespace Trinity\Component\Utils\Tests\Entity;
 class EntityParent
 {
 
+    /** @var int */
     protected $id;
 
 
     /**
-     * @return mixed
+     * EntityParent constructor.
+     *
+     * @param int $id
      */
-    public function getId()
+    public function __construct(int $id)
+    {
+        $this->id     = $id;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getId(): int
     {
         return $this->id;
     }
 
+
     /**
      * @return string
      */
-    public function parentFunction()
+    public function parentFunction(): string
     {
         return 'parent';
     }
 
+
     /**
-     * @param $a
-     * @param $b
+     * @param int $a
+     * @param int $b
      *
-     * @return mixed
+     * @return int mixed
      */
-    public function add($a, $b)
+    public function add(int $a, int $b): int
     {
         return $a + $b;
     }
