@@ -122,9 +122,9 @@ class PriceStringGenerator
     /**
      * @param float $initialPrice
      * @param string $type
-     * @param float $rebillPrice
-     * @param int $rebillTimes
-     * @param int $frequency
+     * @param float|null $rebillPrice
+     * @param int|null $rebillTimes
+     * @param int|null $frequency
      *
      * @return string
      * @throws \UnexpectedValueException
@@ -135,9 +135,9 @@ class PriceStringGenerator
     public function generateFullPrice(
         float $initialPrice,
         string $type = 'standard',
-        float $rebillPrice = 0,
-        int $rebillTimes = 0,
-        int $frequency = 0
+        ?float $rebillPrice = 0,
+        ?int $rebillTimes = 0,
+        ?int $frequency = 0
     ):string {
         $currency = $this->settingsManager->get('currency');
 
@@ -160,10 +160,10 @@ class PriceStringGenerator
     /**
      * @param float $initialPrice
      * @param string $type
-     * @param float $rebillPrice
-     * @param int $rebillTimes
-     * @param int $frequency
-     * @param int $trial
+     * @param float|null $rebillPrice
+     * @param int|null $rebillTimes
+     * @param int|null $frequency
+     * @param int|null $trial
      *
      * @return string
      * @throws \UnexpectedValueException
@@ -175,10 +175,10 @@ class PriceStringGenerator
     public function generatePaymentString(
         float $initialPrice,
         string $type = 'standard',
-        float $rebillPrice = 0,
-        int $rebillTimes = 0,
-        int $frequency = 0,
-        int $trial = 0
+        ?float $rebillPrice = 0,
+        ?int $rebillTimes = 0,
+        ?int $frequency = 0,
+        ?int $trial = 0
     ): string {
         $currency = $this->settingsManager->get('currency');
 
@@ -213,9 +213,9 @@ class PriceStringGenerator
     /**
      * @param float $initialPrice
      * @param string $type
-     * @param float $rebillPrice
-     * @param int $rebillTimes
-     * @param int $frequency
+     * @param float|null $rebillPrice
+     * @param int|null $rebillTimes
+     * @param int|null $frequency
      *
      * @return string
      * @throws \UnexpectedValueException
@@ -227,9 +227,9 @@ class PriceStringGenerator
     public function generateShortPaymentString(
         float $initialPrice,
         string $type = 'standard',
-        float $rebillPrice = 0,
-        int $rebillTimes = 0,
-        int $frequency = 0
+        ?float $rebillPrice = 0,
+        ?int $rebillTimes = 0,
+        ?int $frequency = 0
     ): string {
         $currency = $this->settingsManager->get('currency');
 
