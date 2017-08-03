@@ -40,11 +40,8 @@ class ObjectMixin
             if ($methods[$m] === 0) {
                 $methods[$m] = (new \ReflectionMethod($class, $m))->returnsReference();
             }
-            if ($methods[$m] === true) {
-                return $object->$m();
-            } else {
-                return $object->$m();
-            }
+            
+            return $object->$m();
         } elseif (isset($methods[$name])) { // public method as closure getter
             $countOfParams = (new \ReflectionMethod($class, $name))->getNumberOfRequiredParameters();
             if ($countOfParams > 0 && !$args) {
@@ -56,14 +53,15 @@ class ObjectMixin
                         break;
                     }
                 }
+                
                 throw new MemberAccessException(
                     "You can not call method '$name' without parameters$source. $countOfParams params is required.",
                     \E_USER_WARNING
                 );
             }
+            
             $reflectionMethod = new \ReflectionMethod($class, $name);
             return  $reflectionMethod->invokeArgs($object, $args ?: []);
-
         } else { // strict class
             $items = \array_merge($properties, \array_keys($methods));
             $hint = \implode(', ', self::getSuggestion($items, $name));
